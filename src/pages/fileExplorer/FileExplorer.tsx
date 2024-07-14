@@ -12,6 +12,12 @@ type FileNode = {
 const FileExplorer: React.FC = () => {
   const [files, setFiles] = useState<FileNode | null>(null);
   const [loading, setLoading] = useState(true);
+  const [contextMenu, setContextMenu] = useState<{ visible: boolean; x: number; y: number; file: FileNode | null }>({
+    visible: false,
+    x: 0,
+    y: 0,
+    file: null
+  });
 
   useEffect(() => {
     const loadFiles = async () => {
@@ -27,24 +33,33 @@ const FileExplorer: React.FC = () => {
     loadFiles();
   }, []);
 
-  const handleRightClick = (event: React.MouseEvent, node: FileNode) => {
+  const handleRightClick = (event: React.MouseEvent, file: FileNode) => {
     event.preventDefault();
-    console.log(`Right-clicked on ${node.name}`);
+    setContextMenu({ visible: true, x: event.clientX, y: event.clientY, file });
+  };
+
+  const handleMenuClick = (action: string) => {
+    if (contextMenu.file) {
+      console.log(`${action} ${contextMenu.file.name}`);
+    }
+    setContextMenu({ ...contextMenu, visible: false, file: null });
   };
 
   const renderFiles = (node: FileNode) => {
     if (node.type === 'folder') {
       return (
-        <div className="folder" key={node.name}>
+        <div className="folder">
           <div className="folder-name" onContextMenu={event => handleRightClick(event, node)}>
             {node.name}
           </div>
-          <div className="folder-contents">{node.data && node.data.map(childNode => renderFiles(childNode))}</div>
+          <div className="folder-contents">
+            {node.data && node.data.map((childNode, index) => <div key={index}>{renderFiles(childNode)}</div>)}
+          </div>
         </div>
       );
     } else {
       return (
-        <div className="file" key={node.name} onContextMenu={event => handleRightClick(event, node)}>
+        <div className="file" onContextMenu={event => handleRightClick(event, node)}>
           {node.name}
         </div>
       );
@@ -55,6 +70,13 @@ const FileExplorer: React.FC = () => {
     <div className="file-explorer">
       {/* <Logo /> */}
       {loading ? <div>Loading...</div> : files && renderFiles(files)}
+      {contextMenu.visible && (
+        <div className="context-menu" style={{ top: contextMenu.y, left: contextMenu.x }}>
+          <div onClick={() => handleMenuClick('copy')}>Copy</div>
+          <div onClick={() => handleMenuClick('delete')}>Delete</div>
+          <div onClick={() => handleMenuClick('rename')}>Rename</div>
+        </div>
+      )}
     </div>
   );
 };
