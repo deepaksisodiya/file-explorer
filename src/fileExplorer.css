@@ -1,0 +1,30 @@
+.file-explorer {
+  font-family: Arial, sans-serif;
+  border: 1px solid;
+}
+
+.folder,
+.file {
+  padding-left: 20px;
+  cursor: pointer;
+}
+
+.folder-name {
+  font-weight: bold;
+}
+
+.context-menu {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  z-index: 1000;
+}
+
+.context-menu div {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.context-menu div:hover {
+  background-color: #ddd;
+}
