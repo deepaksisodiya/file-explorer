@@ -1,16 +1,5 @@
 .file-explorer {
   font-family: Arial, sans-serif;
-  border: 1px solid;
-}
-
-.folder,
-.file {
-  padding-left: 20px;
-  cursor: pointer;
-}
-
-.folder-name {
-  font-weight: bold;
 }
 
 .context-menu {
@@ -24,8 +13,4 @@
 .context-menu div {
   padding: 8px 12px;
   cursor: pointer;
-}
-
-.context-menu div:hover {
-  background-color: #ddd;
 }
