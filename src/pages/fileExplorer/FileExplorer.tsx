@@ -1,13 +1,7 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import FileTree from './FileTree';
+import { FileNode } from './types';
 import './fileExplorer.css';
-
-type FileNode = {
-  type: 'folder' | 'file';
-  name: string;
-  meta?: string;
-  data?: FileNode[];
-};
 
 const FileExplorer: React.FC = () => {
   const [files, setFiles] = useState<FileNode | null>(null);

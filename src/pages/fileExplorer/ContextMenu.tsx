@@ -1,27 +1,30 @@
-import React, { useRef, useEffect } from 'react';
-
+import React, { useRef, useEffect, useCallback } from 'react';
+import { FileNode } from './types';
 interface ContextMenuProps {
   x: number;
   y: number;
-  file: { type: 'folder' | 'file'; name: string; meta?: string };
+  file: FileNode;
   onClose: () => void;
 }
 
 const ContextMenu: React.FC<ContextMenuProps> = ({ x, y, file, onClose }) => {
   const menuRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+  const handleClickOutside = useCallback(
+    (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         onClose();
       }
-    };
+    },
+    [onClose]
+  );
 
+  useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [onClose]);
+  }, [handleClickOutside]);
 
   const handleMenuClick = (action: string) => {
     console.log(`${action}: ${file.name}`);
